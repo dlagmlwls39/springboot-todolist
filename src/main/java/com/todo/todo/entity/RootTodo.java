@@ -3,39 +3,60 @@ package com.todo.todo.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.time.*;
 
 @Entity
 @Getter
 @ToString
+@SQLDelete(sql = "UPDATE users_root_todo SET deleted_dt = CURRENT_TIMESTAMP WHERE root_todo_id = ?")
+@Where(clause = "deleted_dt is null")
 @Table(name = "users_root_todo")
-public class RootTodo {
+public class RootTodo extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "root_todo_id")
     private Long rootTodoId;
-    @Column(name = "user_id")
+
     private Long userId;
-    @Column(name = "todo_content")
+
     private String todoContent;
-    @Column(name = "alarm_yn")
+
     private int alarmYn;
-    @Column(name = "alarm_time")
+
     private LocalTime alarmTime;
-    @Column(name = "routine_yn")
+
     private int routineYn;
-    @Column(name = "created_dt")
-    private LocalDateTime createdDt;
-    @Column(name = "updated_dt")
-    private LocalDateTime updatedDt;
-    @Column(name = "deleted_dt")
+
     private LocalDateTime deletedDt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(referencedColumnName = "user_id", name = "user_id", insertable = false, updatable = false)
+    @JoinColumn(referencedColumnName = "userId", name = "userId", insertable = false, updatable = false)
     @JsonIgnore
     private User user;
+
+    public RootTodo() {
+    }
+
+    @Builder
+    public RootTodo(Long rootTodoId, Long userId, String todoContent, int alarmYn, LocalTime alarmTime, int routineYn) {
+        this.rootTodoId = rootTodoId;
+        this.userId = userId;
+        this.todoContent = todoContent;
+        this.alarmYn = alarmYn;
+        this.alarmTime = alarmTime;
+        this.routineYn = routineYn;
+    }
+
+    @Builder
+    public RootTodo(Long userId, String todoContent, int alarmYn, LocalTime alarmTime, int routineYn) {
+        this.userId = userId;
+        this.todoContent = todoContent;
+        this.alarmYn = alarmYn;
+        this.alarmTime = alarmTime;
+        this.routineYn = routineYn;
+    }
 
 }

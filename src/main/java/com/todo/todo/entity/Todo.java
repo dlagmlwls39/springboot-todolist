@@ -3,38 +3,37 @@ package com.todo.todo.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.time.*;
 
 @Entity
 @Getter
 @ToString
+@SQLDelete(sql = "UPDATE users_todo SET deleted_dt = CURRENT_TIMESTAMP WHERE todo_id = ?")
+@Where(clause = "deleted_dt is null")
 @Table(name = "users_todo")
-public class Todo {
+public class Todo extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "todo_id")
     private Long todoId;
-    @Column(name = "root_todo_id")
+
     private Long rootTodoId;
-    @Column(name = "todo_content")
+
     private String todoContent;
-    @Column(name = "memo")
+
     private String memo;
-    @Column(name = "deadline")
+
     private LocalDateTime deadline;
-    @Column(name = "complete_yn")
+
     private int completeYn;
-    @Column(name = "created_dt")
-    private LocalDateTime createdDt;
-    @Column(name = "updated_dt")
-    private LocalDateTime updatedDt;
-    @Column(name = "deleted_dt")
+
     private LocalDateTime deletedDt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(referencedColumnName = "root_todo_id", name = "root_todo_id", insertable = false, updatable = false)
+    @JoinColumn(referencedColumnName = "rootTodoId", name = "rootTodoId", insertable = false, updatable = false)
     @JsonIgnore
     private RootTodo rootTodo;
 
