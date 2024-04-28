@@ -18,7 +18,9 @@ public class RootTodoService {
         this.rootTodoRepository = rootTodoRepository;
     }
 
-    // 새로운 RootTodo 생성
+    /**
+     * 새로운 RootTodo 생성
+     */
     @Transactional
     public RootTodo createRootTodo(RootTodoDto rootTodoDto) throws Exception {
         RootTodo newRootTodo = RootTodo.builder()
@@ -31,7 +33,9 @@ public class RootTodoService {
         return rootTodoRepository.save(newRootTodo);
     }
 
-    // RootTodo 목록 조회
+    /**
+     * RootTodo 목록 조회
+     */
     @Transactional
     public List<RootTodoDto> getRootTodo(Long userId) throws Exception {
         List<RootTodo> results = rootTodoRepository.findByUserId(userId);
@@ -51,7 +55,9 @@ public class RootTodoService {
         return RootTodoDtoList;
     }
 
-    // RootTodo 수정
+    /**
+     * RootTodo 수정
+     */
     @Transactional
     public RootTodo updateRootTodo(RootTodoDto rootTodoDto) throws Exception {
         RootTodo rootTodoEntity = rootTodoDto.toEntity();
@@ -65,7 +71,9 @@ public class RootTodoService {
         }
     }
 
-    // RootTodo 삭제
+    /**
+     * RootTodo 삭제
+     */
     @Transactional
     public void deleteRootTodo(Long rootTodoId) throws Exception {
         rootTodoRepository.deleteById(rootTodoId);
